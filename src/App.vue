@@ -1,85 +1,79 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <div class="app">
+    <header>
+      <div class="order">
+        <button @click="handleClick('title')">order by title</button>
+        <button @click="handleClick('salary')">order by salary</button>
+        <button @click="handleClick('location')">order by location</button>
+      </div>
+    </header>
+    <job-list :jobs="jobs" :order="order"></job-list>
+  </div>
 </template>
 
-<style scoped>
+<script lang="ts">
+import type Job from "@/types/Job";
+import type OrderTerm from "@/types/OrderTerm";
+import { defineComponent, ref } from "vue";
+import JobList from "./components/JobList.vue";
+
+export default defineComponent({
+  name: "App",
+  components: { JobList },
+  setup() {
+    const jobs = ref<Job[]>([
+      {
+        title: "farm worker",
+        location: "lon lon ranch",
+        salary: 30000,
+        id: "1",
+      },
+      {
+        title: "quarryman",
+        location: "death mountain",
+        salary: 40000,
+        id: "2",
+      },
+      {
+        title: "flute player",
+        location: "the lost woods",
+        salary: 35000,
+        id: "3",
+      },
+      { title: "fisherman", location: "lake hylia", salary: 21000, id: "4" },
+      {
+        title: "prison guard",
+        location: "gerudo valley",
+        salary: 32000,
+        id: "5",
+      },
+    ]);
+
+    const order = ref<OrderTerm>("title");
+    const handleClick = (term: OrderTerm) => {
+      order.value = term;
+    };
+
+    return { jobs, handleClick, order };
+  },
+});
+</script>
+
+<style>
 header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
   text-align: center;
-  margin-top: 2rem;
 }
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
+header .order {
+  margin-top: 20px;
 }
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+button {
+  margin: 0 10px;
+  color: #1195c9;
+  border: 3px solid #1195c9;
+  background: #d5f0ff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
 }
 </style>
